@@ -22,4 +22,8 @@ jobs:
         run: npm install
 
       - name: Start Service As Dev
-        run: npm run dev
+        run: |
+          sudo ufw allow 4600
+          sudo ufw enable
+          sudo ufw reload
+          npm run dev -- --host -p 4600
