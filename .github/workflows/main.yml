@@ -23,7 +23,7 @@ jobs:
 
       - name: Install Pm2 With npm
         run: |
-          sudo apt install npm -y
+          sudo apt install -y npm curl
           npm install -g pm2
           sudo ufw allow 4600
           sudo ufw enable
@@ -34,3 +34,6 @@ jobs:
           npm run build
           pm2 start npm --name "my-node" -- run start
           pm2 status
+          curl ifconfig.me
+          ip a
+          
