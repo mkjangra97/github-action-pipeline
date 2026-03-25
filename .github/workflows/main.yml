@@ -1,0 +1,25 @@
+name: NodeJs Project
+
+on:
+  push:
+    branches:
+      -  main
+
+jobs:
+  node-env:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6.0.2
+
+      - name: Setup Node Environment
+        uses: actions/setup-node@v6.3.0
+        with:
+          node-version: '22'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Start Service As Dev
+        run: npm run dev
