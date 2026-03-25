@@ -21,9 +21,16 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Start Service As Dev
+      - name: Install Pm2 With npm
         run: |
+          sudo apt install npm -y
+          npm install -g pm2
           sudo ufw allow 4600
           sudo ufw enable
           sudo ufw reload
-          npm run dev -- --host --port 4600
+          
+      - name: Start Service As Dev
+        run: |
+          npm run build
+          pm2 start npm --name "my-node" -- run start
+          pm2 status
