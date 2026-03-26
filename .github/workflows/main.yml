@@ -44,4 +44,5 @@ jobs:
         run: |
           pm2 start npm --name "my-node" -- run start
           pm2 status
+          pm2 logs my-node
           
