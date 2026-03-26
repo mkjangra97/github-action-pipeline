@@ -6,36 +6,47 @@ on:
       - main
 
 jobs:
-  ubuntu-server:
+  ubuntu-runner:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v6.0.2
 
-      - name: Custom Build
-        run: |
-           mkdir -p manish && cd manish
-           echo "Manish Kumar Jangra" > manish.txt
+      - name: Install Node Environment
+        uses: actions/setup-node@v6.3.0
+        with:
+          node-version: 22
 
-      - name: Upload Artifacts
+      - name: Install Node Dependencies
+        run: npm install
+
+      - name: Build Project
+        run: npm run build
+
+      - name: Upload Files on GitHub Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: upload-folder
-          path: manish/
+          name: build-folder
+          path: dist/
 
-  self-hosted-server:
+  self-hosted-runner:
     runs-on: [self-hosted, cssoft]
-    needs: ubuntu-server
-    
+    needs: ubuntu-runner
+
     steps:
-      - name: Download Artifacts
+      - name: Checkout Repository
+        uses: actions/checkout@v6.0.2
+
+      - name: Download From GitHub Artifact
         uses: actions/download-artifact@v4
         with:
-          name: upload-folder
-          path: ./manish
+          name: build-folder
+          path: ./dist
 
-      - name: Deploy On Server
+      - name: Deploy on Nginx Folder
         run: |
-          cd  manish
-          cat manish.txt
+          cd dist
+          cp -r * /var/www/main
+          ls /var/www/main
+        
