@@ -1,48 +1,41 @@
-name: NodeJs Project
+name: Sample CI/CD Pipeline
 
 on:
   push:
     branches:
-      -  main
+      - main
 
 jobs:
-  node-env:
+  ubuntu-server:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v6.0.2
 
-      - name: Setup Node Environment
-        uses: actions/setup-node@v6.3.0
+      - name: Custom Build
+        run: |
+           mkdir -p manish && cd manish
+           echo "Manish Kumar" > manish.txt
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3.2.2
         with:
-          node-version: '22'
+          name: upload-folder
+          path: manish/
 
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Test Service
-        run: npm test --if-present
-
-  build-deploy:
+  self-hosted-server:
     runs-on: [self-hosted, cssoft]
-    needs: node-env
+    needs: ubuntu-server
     
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v6.0.2
-
-      - name: Setup Node Environment
-        uses: actions/setup-node@v6.3.0
+      - name: Download Artifacts
+        uses: actions/download-artifact@v3.1.0
         with:
-          node-version: '22'
+          name: upload-folder
+          path: ./manish
 
-      - name: Install Pm2 With npm
-        run: npm install -g pm2
-          
-      - name: Start Service As Dev
+      - name: Deploy On Server
         run: |
-          pm2 start npm --name "my-node" -- run start
-          pm2 status
-          pm2 logs my-node
-          
+          cd  manish
+          cat manish.txt
