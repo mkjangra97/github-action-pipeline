@@ -7,7 +7,7 @@ on:
 
 jobs:
   node-env:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
@@ -20,7 +20,15 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
+
+      - name: Install Pm2 With npm
+        run: |
+          sudo apt install -y npm
+          npm install -g pm2
           
       - name: Start Service As Dev
-        run: npm run dev
+        run: |
+          npm run build
+          pm2 start npm --name "my-node" -- run start
+          pm2 status
           
