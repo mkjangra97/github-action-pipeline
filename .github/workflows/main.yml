@@ -42,7 +42,6 @@ jobs:
           
       - name: Start Service As Dev
         run: |
-          npm run build
           pm2 start npm --name "my-node" -- run start
           pm2 status
           
