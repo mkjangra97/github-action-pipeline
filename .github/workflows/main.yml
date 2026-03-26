@@ -21,6 +21,11 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
+  build-deploy:
+    runs-on: [self-hosted, cssoft]
+    needs: node-env
+    
+    steps:
       - name: Install Pm2 With npm
         run: |
           sudo apt install -y npm
