@@ -28,7 +28,7 @@ jobs:
     steps:
       - name: Install Pm2 With npm
         run: |
-          sudo apt install -y npm
+          sudo apt install npm -y
           npm install -g pm2
           
       - name: Start Service As Dev
